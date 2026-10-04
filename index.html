@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Animasi Pixel ke Smooth 📸✨</title>
+  <title>Animasi Sketsa Pensil Pixel to Smooth ✏️🎨</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #0f0c20;
+      background: #121216;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       display: flex;
@@ -29,19 +29,18 @@
       text-align: center;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       position: relative;
-      overflow: hidden;
     }
 
     h1 {
       font-family: 'Press Start 2P', cursive;
-      font-size: 0.9rem;
-      color: #00ffcc;
+      font-size: 0.85rem;
+      color: #e0e0e0;
       margin-bottom: 20px;
       line-height: 1.6;
-      text-shadow: 2px 2px #ff2a5f;
+      text-shadow: 2px 2px #555;
     }
 
-    /* SISTEM HALAMAN (PAGE TRANSITION) */
+    /* SISTEM HALAMAN */
     .page {
       display: none;
       flex-direction: column;
@@ -60,19 +59,19 @@
 
     /* HALAMAN 1: INPUT FOTO */
     .upload-box {
-      border: 2px dashed #ff2a5f;
+      border: 2px dashed #aaa;
       border-radius: 12px;
       padding: 25px 15px;
       width: 100%;
       margin-bottom: 20px;
-      background: rgba(255, 42, 95, 0.05);
+      background: rgba(255, 255, 255, 0.03);
       cursor: pointer;
       transition: 0.3s;
     }
 
     .upload-box:hover {
-      background: rgba(255, 42, 95, 0.15);
-      border-color: #00ffcc;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #fff;
     }
 
     input[type="file"] { display: none; }
@@ -84,13 +83,13 @@
       object-fit: contain;
       margin-bottom: 15px;
       display: none;
-      border: 2px solid #00ffcc;
+      border: 2px solid #888;
     }
 
-    /* HALAMAN 2: ANIMASI PIXEL TO SMOOTH */
+    /* HALAMAN 2: ANIMASI SKETSA */
     .canvas-wrapper {
-      background: #000;
-      border: 2px solid #00ffcc;
+      background: #fff; /* Latar putih khas kertas sketsa */
+      border: 3px solid #666;
       border-radius: 12px;
       overflow: hidden;
       display: flex;
@@ -98,7 +97,7 @@
       align-items: center;
       margin-bottom: 15px;
       max-width: 100%;
-      box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
     canvas {
@@ -109,12 +108,12 @@
 
     .status-text {
       font-size: 0.85rem;
-      color: #ffd1b3;
+      color: #ccc;
       margin-bottom: 20px;
       font-weight: 600;
     }
 
-    /* TOMBOL UTAMA */
+    /* TOMBOL */
     .btn {
       font-family: 'Press Start 2P', cursive;
       font-size: 0.7rem;
@@ -122,29 +121,29 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      background: #ff2a5f;
+      background: #444;
       color: white;
-      box-shadow: 0 4px 0 #990026;
+      box-shadow: 0 4px 0 #222;
       transition: 0.1s;
       width: 100%;
     }
 
     .btn:active {
       transform: translateY(4px);
-      box-shadow: 0 0 0 #990026;
+      box-shadow: 0 0 0 #222;
     }
 
     .btn:disabled {
-      background: #444;
+      background: #2a2a2a;
       box-shadow: none;
       cursor: not-allowed;
-      color: #888;
+      color: #666;
     }
 
     .btn-secondary {
-      background: #00ffcc;
-      color: #0f0c20;
-      box-shadow: 0 4px 0 #00997a;
+      background: #777;
+      color: #fff;
+      box-shadow: 0 4px 0 #444;
       margin-top: 10px;
     }
   </style>
@@ -155,7 +154,7 @@
 
     <!-- ================= HALAMAN 1: MENU INPUT ================= -->
     <div id="page1" class="page active">
-      <h1>INPUT FOTO KAMU 📸</h1>
+      <h1>SKETSA PENSIL ✏️</h1>
 
       <div class="upload-box" onclick="document.getElementById('photoInput').click()">
         <p id="uploadLabel">📁 Klik di sini untuk memilih foto dari perangkat</p>
@@ -169,22 +168,21 @@
 
     <!-- ================= HALAMAN 2: ANIMASI PROSES ================= -->
     <div id="page2" class="page">
-      <h1>PROSES PIXEL ART 👾</h1>
+      <h1>PROSES SKETSA ✏️</h1>
 
       <div class="canvas-wrapper">
         <canvas id="animCanvas"></canvas>
       </div>
 
-      <div id="statusText" class="status-text">Memproses piksel buram...</div>
+      <div id="statusText" class="status-text">Memproses sketsa piksel...</div>
 
-      <button id="replayBtn" class="btn btn-secondary" onclick="startPixelAnimation()">Putar Ulang Animasi 🔄</button>
+      <button id="replayBtn" class="btn btn-secondary" onclick="startSketchAnimation()">Putar Ulang Animasi 🔄</button>
       <button class="btn" onclick="goToPage(1)">Upload Foto Lain 📁</button>
     </div>
 
   </div>
 
   <script>
-    // Elemen DOM
     const photoInput = document.getElementById('photoInput');
     const uploadLabel = document.getElementById('uploadLabel');
     const previewImg = document.getElementById('previewImg');
@@ -196,9 +194,10 @@
     const replayBtn = document.getElementById('replayBtn');
 
     let loadedImage = null;
+    let sketchCanvas = null; // Canvas penampung hasil sketsa asli
     let animationFrameId = null;
 
-    // 1. Opsi Upload Foto di Halaman 1
+    // 1. Input Foto
     photoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -209,56 +208,109 @@
       reader.onload = function(event) {
         loadedImage = new Image();
         loadedImage.onload = function() {
-          // Tampilkan preview foto di Halaman 1
           previewImg.src = event.target.result;
           previewImg.style.display = 'block';
-          processBtn.disabled = false; // Aktifkan tombol Lanjut
+          processBtn.disabled = false;
         };
         loadedImage.src = event.target.result;
       };
       reader.readAsDataURL(file);
     });
 
-    // 2. Klik Tombol Lanjut Proses -> Pindah Halaman 2
+    // 2. Tombol Lanjut
     processBtn.addEventListener('click', function() {
       goToPage(2);
-      startPixelAnimation();
+      generatePencilSketch();
+      startSketchAnimation();
     });
 
-    // 3. Fungsi Navigasi Pindah Halaman
     function goToPage(pageNum) {
       document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
       document.getElementById(`page${pageNum}`).classList.add('active');
 
-      if (pageNum === 1) {
-        // Stop animasi jika kembali ke halaman 1
-        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (pageNum === 1 && animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
       }
     }
 
-    // 4. LOGIKA ANIMASI: PIXEL BURAM (8-BIT) -> SMOOTH
-    function startPixelAnimation() {
-      if (!loadedImage) return;
-
-      // Batasi ukuran canvas agar performa tetap cepat
-      const maxW = 400;
+    // 3. FUNGSI MEMBUAT EFEK SKETSA PENSIL (Edge Detection / Sobel Filter)
+    function generatePencilSketch() {
+      const maxW = 450;
       let scale = 1;
       if (loadedImage.width > maxW) scale = maxW / loadedImage.width;
 
       const w = Math.floor(loadedImage.width * scale);
       const h = Math.floor(loadedImage.height * scale);
 
+      sketchCanvas = document.createElement('canvas');
+      sketchCanvas.width = w;
+      sketchCanvas.height = h;
+      const sCtx = sketchCanvas.getContext('2d');
+
+      sCtx.drawImage(loadedImage, 0, 0, w, h);
+      const imgData = sCtx.getImageData(0, 0, w, h);
+      const data = imgData.data;
+
+      // Konversi ke Grayscale
+      const gray = new Float32Array(w * h);
+      for (let i = 0; i < data.length; i += 4) {
+        gray[i / 4] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      }
+
+      const sketchData = sCtx.createImageData(w, h);
+      const sData = sketchData.data;
+
+      // Operator Sobel untuk Garis Sketsa Pensil
+      for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+          const idx = y * w + x;
+
+          const gx =
+            -1 * gray[idx - w - 1] + 1 * gray[idx - w + 1] +
+            -2 * gray[idx - 1]     + 2 * gray[idx + 1] +
+            -1 * gray[idx + w - 1] + 1 * gray[idx + w + 1];
+
+          const gy =
+            -1 * gray[idx - w - 1] - 2 * gray[idx - w] - 1 * gray[idx - w + 1] +
+             1 * gray[idx + w - 1] + 2 * gray[idx + w] + 1 * gray[idx + w + 1];
+
+          const magnitude = Math.sqrt(gx * gx + gy * gy);
+          
+          // Invert: area latar jadi putih, garis tepi jadi hitam pensil
+          let val = 255 - (magnitude * 1.5);
+          if (val < 0) val = 0;
+          if (val > 255) val = 255;
+
+          const pIdx = idx * 4;
+          sData[pIdx]     = val; // Red
+          sData[pIdx + 1] = val; // Green
+          sData[pIdx + 2] = val; // Blue
+          sData[pIdx + 3] = 255; // Alpha
+        }
+      }
+
+      sCtx.putImageData(sketchData, 0, 0);
+
       canvas.width = w;
       canvas.height = h;
+    }
 
-      // Buat Canvas Offscreen sementara untuk mengecilkan foto
+    // 4. ANIMASI SLOW-MOTION (PIXEL BURAM -> SKETSA SMOOTH)
+    function startSketchAnimation() {
+      if (!sketchCanvas) return;
+
+      const w = canvas.width;
+      const h = canvas.height;
+
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
 
-      // Parameter Animasi
-      let currentScale = 0.02; // Mulai dari piksel sangat kasar/buram (2% ukuran asli)
-      const targetScale = 1.0;  // Berakhir di 100% (smooth)
-      const speed = 0.008;      // Kecepatan transisi perubahan piksel
+      let currentScale = 0.02; // Mulai dari piksel sangat besar/buram (2%)
+      const targetScale = 1.0; 
+      
+      // KECEPATAN ANIMASI (Dibuat lambat)
+      // Nilai semakin kecil = proses animasi semakin lambat
+      const speed = 0.0015; 
 
       replayBtn.disabled = true;
 
@@ -267,18 +319,16 @@
           currentScale += speed;
           if (currentScale > targetScale) currentScale = targetScale;
 
-          // Ukuran grid piksel mini
           const sw = Math.max(1, Math.floor(w * currentScale));
           const sh = Math.max(1, Math.floor(h * currentScale));
 
           tempCanvas.width = sw;
           tempCanvas.height = sh;
 
-          // Gambar foto asli ke bentuk mini
-          tempCtx.drawImage(loadedImage, 0, 0, sw, sh);
+          // Kecilkan sketsa ke piksel mini
+          tempCtx.drawImage(sketchCanvas, 0, 0, sw, sh);
 
-          // Render kembali ke canvas utama dengan skala besar
-          // Jika skala masih kecil, matikan smoothing agar tampak piksel kotak-kotak
+          // Jika skala sudah mendekati 85%, aktifkan smoothing agar halus
           const isSmoothing = currentScale > 0.85;
           ctx.imageSmoothingEnabled = isSmoothing;
           ctx.mozImageSmoothingEnabled = isSmoothing;
@@ -287,21 +337,19 @@
           ctx.clearRect(0, 0, w, h);
           ctx.drawImage(tempCanvas, 0, 0, sw, sh, 0, 0, w, h);
 
-          // Update Teks Status berdasarkan persentase
           const percent = Math.floor((currentScale / targetScale) * 100);
-          statusText.innerText = `⏳ Memproses Piksel: ${percent}%...`;
+          statusText.innerText = `✏️ Menggambar Sketsa: ${percent}%...`;
 
           animationFrameId = requestAnimationFrame(renderFrame);
         } else {
-          // Hasil Akhir: Foto Halus / Smooth Sempurna
+          // Hasil Akhir: Sketsa Pensil Halus / Smooth Sempurna
           ctx.imageSmoothingEnabled = true;
-          ctx.drawImage(loadedImage, 0, 0, w, h);
-          statusText.innerText = "✨ Selesai! Foto kembali smooth sempurna.";
+          ctx.drawImage(sketchCanvas, 0, 0, w, h);
+          statusText.innerText = "✨ Selesai! Sketsa pensil terbentuk sempurna.";
           replayBtn.disabled = false;
         }
       }
 
-      // Hentikan animasi sebelumnya jika ada & jalankan yang baru
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       renderFrame();
     }
