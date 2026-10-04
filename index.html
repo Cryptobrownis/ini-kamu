@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sketsa Pensil Berwarna & Ramalan Gombal ✏️🔮</title>
+  <title>Ramalan Dewa lewat garis wajah 📸🔮</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #0f1026;
+      background: #0d0b1e;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       display: flex;
@@ -34,10 +34,10 @@
     h1 {
       font-family: 'Press Start 2P', cursive;
       font-size: 0.85rem;
-      color: #ff70a6;
+      color: #00ffcc;
       margin-bottom: 20px;
       line-height: 1.6;
-      text-shadow: 2px 2px #70d6ff;
+      text-shadow: 2px 2px #ff2a5f;
     }
 
     /* SISTEM HALAMAN */
@@ -59,19 +59,19 @@
 
     /* HALAMAN 1: INPUT FOTO */
     .upload-box {
-      border: 2px dashed #ff70a6;
+      border: 2px dashed #00ffcc;
       border-radius: 12px;
       padding: 25px 15px;
       width: 100%;
       margin-bottom: 20px;
-      background: rgba(255, 112, 166, 0.05);
+      background: rgba(0, 255, 204, 0.05);
       cursor: pointer;
       transition: 0.3s;
     }
 
     .upload-box:hover {
-      background: rgba(255, 112, 166, 0.15);
-      border-color: #70d6ff;
+      background: rgba(0, 255, 204, 0.15);
+      border-color: #ff2a5f;
     }
 
     input[type="file"] { display: none; }
@@ -83,13 +83,13 @@
       object-fit: contain;
       margin-bottom: 15px;
       display: none;
-      border: 2px solid #70d6ff;
+      border: 2px solid #00ffcc;
     }
 
-    /* HALAMAN 2: ANIMASI SKETSA & RAMALAN */
+    /* HALAMAN 2: CANVAS ANIMASI FOTO ASLI */
     .canvas-wrapper {
-      background: #fff;
-      border: 3px solid #70d6ff;
+      background: #000;
+      border: 3px solid #00ffcc;
       border-radius: 12px;
       overflow: hidden;
       display: flex;
@@ -97,7 +97,7 @@
       align-items: center;
       margin-bottom: 15px;
       max-width: 100%;
-      box-shadow: 0 0 20px rgba(112, 214, 255, 0.3);
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
     }
 
     canvas {
@@ -115,8 +115,8 @@
 
     /* KARTU RAMALAN GOMBAL */
     .ramalan-card {
-      background: rgba(255, 112, 166, 0.15);
-      border: 2px dashed #ff70a6;
+      background: rgba(255, 42, 95, 0.15);
+      border: 2px dashed #ff2a5f;
       border-radius: 12px;
       padding: 15px;
       margin-bottom: 20px;
@@ -133,7 +133,7 @@
     .ramalan-title {
       font-family: 'Press Start 2P', cursive;
       font-size: 0.65rem;
-      color: #ffd670;
+      color: #00ffcc;
       margin-bottom: 8px;
     }
 
@@ -152,16 +152,16 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      background: #ff70a6;
+      background: #ff2a5f;
       color: white;
-      box-shadow: 0 4px 0 #c4386d;
+      box-shadow: 0 4px 0 #990026;
       transition: 0.1s;
       width: 100%;
     }
 
     .btn:active {
       transform: translateY(4px);
-      box-shadow: 0 0 0 #c4386d;
+      box-shadow: 0 0 0 #990026;
     }
 
     .btn:disabled {
@@ -172,9 +172,9 @@
     }
 
     .btn-secondary {
-      background: #70d6ff;
-      color: #0f1026;
-      box-shadow: 0 4px 0 #2ca1cc;
+      background: #00ffcc;
+      color: #0d0b1e;
+      box-shadow: 0 4px 0 #00997a;
       margin-top: 10px;
     }
   </style>
@@ -185,10 +185,10 @@
 
     <!-- ================= HALAMAN 1: MENU INPUT ================= -->
     <div id="page1" class="page active">
-      <h1>PENSIL BERWARNA ✏️🎨</h1>
+      <h1>INPUT FOTO LU KIDSS 📸</h1>
 
       <div class="upload-box" onclick="document.getElementById('photoInput').click()">
-        <p id="uploadLabel">📁 Klik di sini untuk memilih foto dari perangkat</p>
+        <p id="uploadLabel">📁 Klik dimari kocakt</p>
         <input type="file" id="photoInput" accept="image/*">
       </div>
 
@@ -199,22 +199,22 @@
 
     <!-- ================= HALAMAN 2: ANIMASI PROSES & RAMALAN ================= -->
     <div id="page2" class="page">
-      <h1>SKETSA BERWARNA ✏️🎨</h1>
+      <h1>RAMALAN ASLI GUNUNG KAWI</h1>
 
       <div class="canvas-wrapper">
         <canvas id="animCanvas"></canvas>
       </div>
 
-      <div id="statusText" class="status-text">Mempersiapkan sketsa berwarna...</div>
+      <div id="statusText" class="status-text">Mempertajam piksel foto...</div>
 
       <!-- TEMPAT RAMALAN GOMBAL TAMPIL -->
       <div id="ramalanCard" class="ramalan-card">
-        <div class="ramalan-title">🔮 RAMALAN SKETSA HARI INI 🔮</div>
+        <div class="ramalan-title">🔮 hasil peramal 🔮</div>
         <div id="ramalanText" class="ramalan-text">...</div>
       </div>
 
-      <button id="replayBtn" class="btn btn-secondary" onclick="startSketchAnimation()">Putar Ulang & Acak Ramalan 🔄</button>
-      <button class="btn" onclick="goToPage(1)">Upload Foto Lain 📁</button>
+      <button id="replayBtn" class="btn btn-secondary" onclick="startPhotoAnimation()">Putar Ulang kalo ragu 🔄</button>
+      <button class="btn" onclick="goToPage(1)">Upload Foto yg laen 📁</button>
     </div>
 
   </div>
@@ -233,21 +233,20 @@
     const replayBtn = document.getElementById('replayBtn');
 
     let loadedImage = null;
-    let sketchCanvas = null;
     let animationFrameId = null;
 
-    // KOLEKSI RAMALAN GOMBAL LUCU
+    // DAFTAR RAMALAN GOMBAL LUCU
     const ramalanList = [
-      "Berdasarkan garis sketsa ini, kamu diramalkan bakal sering kepikiran aku setiap mau tidur. Hati-hati ya! 😜",
-      "Garis pensilnya tajam, tapi belum bisa menandingi ketajaman tatapan matamu yang bikin hatiku luluh. eaaa~ 💘",
-      "Hasil analisis piksel: Tingkat kemanisanmu di foto ini melebihi batas normal. Tolong dikondisikan senyumnya! 🍩",
-      "Ramalan bahaya: Ada indikasi kuat foto ini akan membuat seseorang gagal fokus seharian! ⚠️😍",
-      "Masa depanmu terlihat sangat cerah, tapi akan jauh lebih cerah kalau kita laluinya bersama. 🔮✨",
-      "Menurut guratan pensil ini, kamu kurang vitamin 'ME'. Disarankan segera bertemu untuk menjaga kesehatan hati. 💊💖",
-      "Sketsa ini membuktikan bahwa kamu nggak cocok jadi bintang film, tapi sangat cocok jadi bintang di hatiku. ⭐😊",
-      "Ramalan kesehatan: Detak jantung seseorang diramalkan bakal berdebar lebih cepat tiap kali melihat foto ini! 💓",
-      "Garis pensilnya rapi banget, persis kayak rencana masa depan kita yang sudah tertata manis. 🙈❤️",
-      "Ramalan cuaca hari ini: Di luar boleh berawan, tapi di hatimu diramalkan penuh bunga-bunga bermekaran! 🌸"
+      "Makin jernih fotonya, makin kelihatan kalau kamu tuh alesan aku senyam senyum sendiri. 😜",
+      "Piksel boleh dari buram ke jernih, tapi rasa sukaku ga pernah burem. eaaaaaakkk~ 💘",
+      "Hasil analisis AI: Foto ini mengandung kadar kemanisan 100% yang berisiko menyebabkan serangan rindu mendadak! 🍩",
+      "Ramalan hari ini: Foto kamu terlalu berbahaya kalau dilihat sendirian, butuh pendamping hidup! ⚠️😍",
+      "Masa depan fotomu sudah jernih, sekarang tinggal masa depan kita berdua yang perlu kita pertegas. 🔮✨",
+      "Katanya foto ini butuh waktu buat jernih, persis kayak hatiku yang butuh waktu buat berhenti mikirin kamu. 💊💖",
+      "Kamera sebagus apapun gak akan bisa menangkap betapa indahnya senyumanmu secara nyata. ⭐😊",
+      "Peringatan!!! foto ini menyebabkan kangen, senyam senyum sendiri, dan bikin kangen. 💓",
+      "Gak peduli mau piksel buram atau HD jernih, monyed pun sujud liatnya. 🙈❤️",
+      "Pikselnya sudah smooth , tinggal perhalus jalan ke pelaminan aja. 🌸"
     ];
 
     // 1. Input Foto
@@ -270,11 +269,10 @@
       reader.readAsDataURL(file);
     });
 
-    // 2. Tombol Lanjut
+    // 2. Klik Tombol Lanjut
     processBtn.addEventListener('click', function() {
       goToPage(2);
-      generateColoredPencilSketch();
-      startSketchAnimation();
+      startPhotoAnimation();
     });
 
     function goToPage(pageNum) {
@@ -286,8 +284,11 @@
       }
     }
 
-    // 3. Efek Sketsa Pensil Berwarna
-    function generateColoredPencilSketch() {
+    // 3. ANIMASI PROSES: PIXEL SANGAT BURAM -> FOTO ASLI JERNIH (LAMBAT)
+    function startPhotoAnimation() {
+      if (!loadedImage) return;
+
+      // Tentukan dimensi canvas berdasar rasio foto asli
       const maxW = 450;
       let scale = 1;
       if (loadedImage.width > maxW) scale = maxW / loadedImage.width;
@@ -295,73 +296,18 @@
       const w = Math.floor(loadedImage.width * scale);
       const h = Math.floor(loadedImage.height * scale);
 
-      sketchCanvas = document.createElement('canvas');
-      sketchCanvas.width = w;
-      sketchCanvas.height = h;
-      const sCtx = sketchCanvas.getContext('2d');
-
-      sCtx.drawImage(loadedImage, 0, 0, w, h);
-      const imgData = sCtx.getImageData(0, 0, w, h);
-      const data = imgData.data;
-
-      const gray = new Float32Array(w * h);
-      for (let i = 0; i < data.length; i += 4) {
-        gray[i / 4] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-      }
-
-      const sketchData = sCtx.createImageData(w, h);
-      const sData = sketchData.data;
-
-      for (let y = 1; y < h - 1; y++) {
-        for (let x = 1; x < w - 1; x++) {
-          const idx = y * w + x;
-
-          const gx =
-            -1 * gray[idx - w - 1] + 1 * gray[idx - w + 1] +
-            -2 * gray[idx - 1]     + 2 * gray[idx + 1] +
-            -1 * gray[idx + w - 1] + 1 * gray[idx + w + 1];
-
-          const gy =
-            -1 * gray[idx - w - 1] - 2 * gray[idx - w] - 1 * gray[idx - w + 1] +
-             1 * gray[idx + w - 1] + 2 * gray[idx + w] + 1 * gray[idx + w + 1];
-
-          const magnitude = Math.sqrt(gx * gx + gy * gy);
-          let edgeFactor = (255 - (magnitude * 1.6)) / 255;
-          if (edgeFactor < 0) edgeFactor = 0;
-          if (edgeFactor > 1) edgeFactor = 1;
-
-          const pIdx = idx * 4;
-          const r = data[pIdx];
-          const g = data[pIdx + 1];
-          const b = data[pIdx + 2];
-
-          const paperBrightness = 25;
-          sData[pIdx]     = Math.min(255, (r + paperBrightness) * edgeFactor);
-          sData[pIdx + 1] = Math.min(255, (g + paperBrightness) * edgeFactor);
-          sData[pIdx + 2] = Math.min(255, (b + paperBrightness) * edgeFactor);
-          sData[pIdx + 3] = 255;
-        }
-      }
-
-      sCtx.putImageData(sketchData, 0, 0);
-
       canvas.width = w;
       canvas.height = h;
-    }
-
-    // 4. Animasi Slow-Motion & Penampil Ramalan
-    function startSketchAnimation() {
-      if (!sketchCanvas) return;
-
-      const w = canvas.width;
-      const h = canvas.height;
 
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
 
-      let currentScale = 0.02;
+      // Mulai dari piksel sangat kasar/rendah (1.5% dari ukuran asli)
+      let currentScale = 0.015; 
       const targetScale = 1.0; 
-      const speed = 0.0012; // Animasi berjalan lambat
+
+      // KECEPATAN ANIMASI (0.0010 = Lambat & Sangat Mulus, memakan waktu ~12-15 detik)
+      const speed = 0.0010; 
 
       replayBtn.disabled = true;
       ramalanCard.style.display = 'none'; // Sembunyikan ramalan saat animasi berjalan
@@ -371,15 +317,19 @@
           currentScale += speed;
           if (currentScale > targetScale) currentScale = targetScale;
 
+          // Hitung ukuran piksel render sementara
           const sw = Math.max(1, Math.floor(w * currentScale));
           const sh = Math.max(1, Math.floor(h * currentScale));
 
           tempCanvas.width = sw;
           tempCanvas.height = sh;
 
-          tempCtx.drawImage(sketchCanvas, 0, 0, sw, sh);
+          // Gambar foto asli ke bentuk piksel mini
+          tempCtx.drawImage(loadedImage, 0, 0, sw, sh);
 
-          const isSmoothing = currentScale > 0.85;
+          // Matikan smoothing di awal agar piksel kotak-kotak terlihat jelas, 
+          // lalu aktifkan saat mendekati jernih (>80%)
+          const isSmoothing = currentScale > 0.80;
           ctx.imageSmoothingEnabled = isSmoothing;
           ctx.mozImageSmoothingEnabled = isSmoothing;
           ctx.webkitImageSmoothingEnabled = isSmoothing;
@@ -388,16 +338,16 @@
           ctx.drawImage(tempCanvas, 0, 0, sw, sh, 0, 0, w, h);
 
           const percent = Math.floor((currentScale / targetScale) * 100);
-          statusText.innerText = `✏️ Memproses Sketsa & Membaca Ramalan: ${percent}%...`;
+          statusText.innerText = `⏳ Menjernihkan Foto & Membaca Ramalan: ${percent}%...`;
 
           animationFrameId = requestAnimationFrame(renderFrame);
         } else {
-          // Hasil Akhir
+          // Hasil Akhir: Foto Asli Jernih (HD) Sempurna
           ctx.imageSmoothingEnabled = true;
-          ctx.drawImage(sketchCanvas, 0, 0, w, h);
-          statusText.innerText = "✨ Selesai! Sketsa & Ramalan Siap!";
+          ctx.drawImage(loadedImage, 0, 0, w, h);
+          statusText.innerText = "✨ Foto Jernih Sempurna & Ramalan Siap!";
           
-          // Pilih dan tampilkan ramalan gombal acak
+          // Tampilkan Ramalan Gombal Acak
           showRandomRamalan();
           replayBtn.disabled = false;
         }
@@ -407,7 +357,7 @@
       renderFrame();
     }
 
-    // Fungsi Mengambil Ramalan Acak
+    // Fungsi Memilih Ramalan Gombal Acak
     function showRandomRamalan() {
       const randomIndex = Math.floor(Math.random() * ramalanList.length);
       ramalanText.innerText = `"${ramalanList[randomIndex]}"`;
