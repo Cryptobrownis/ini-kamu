@@ -3,220 +3,272 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Karakter Piksel 8-Bit 👾</title>
+  <title>Konverter Foto ke Pixel Art 8-Bit 📸👾</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #121226;
+      background: #0f0c20;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       color: #fff;
       padding: 20px;
     }
 
-    .card {
-      background: #1a1a3a;
-      border: 4px solid #ff2a5f;
+    .container {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 0 25px rgba(255, 42, 95, 0.4);
-      text-align: center;
-      max-width: 400px;
+      padding: 30px 20px;
+      max-width: 550px;
       width: 100%;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     }
 
     h1 {
       font-family: 'Press Start 2P', cursive;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #00ffcc;
       margin-bottom: 20px;
+      line-height: 1.6;
       text-shadow: 2px 2px #ff2a5f;
-      line-height: 1.5;
     }
 
-    /* Container Canvas Pixel Art */
-    .canvas-container {
-      background: #0b0b1a;
-      border: 3px solid #00ffcc;
+    /* Area Upload Foto */
+    .upload-box {
+      border: 2px dashed #ff2a5f;
       border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: rgba(255, 42, 95, 0.05);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .upload-box:hover {
+      background: rgba(255, 42, 95, 0.15);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .upload-label {
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #ffd1b3;
+      display: block;
+    }
+
+    /* Controls Slider */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: rgba(0,0,0,0.3);
       padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .control-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .control-group label {
+      font-weight: 600;
+    }
+
+    input[type="range"] {
+      width: 50%;
+      accent-color: #00ffcc;
+      cursor: pointer;
+    }
+
+    /* Container Canvas */
+    .canvas-wrapper {
+      background: #000;
+      border: 2px solid #00ffcc;
+      border-radius: 12px;
+      overflow: hidden;
       display: inline-block;
       margin-bottom: 20px;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+      max-width: 100%;
     }
 
     canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
-      display: block;
-      margin: 0 auto;
     }
 
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
+    /* Tombol */
     .btn {
       font-family: 'Press Start 2P', cursive;
-      font-size: 0.65rem;
-      padding: 12px 15px;
+      font-size: 0.7rem;
+      padding: 12px 20px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: transform 0.1s ease, background 0.2s ease;
-      box-shadow: 0 4px 0 #000;
+      background: #ff2a5f;
+      color: white;
+      box-shadow: 0 4px 0 #990026;
+      transition: 0.1s;
     }
 
     .btn:active {
       transform: translateY(4px);
-      box-shadow: 0 0 0 #000;
+      box-shadow: 0 0 0 #990026;
     }
 
-    .btn-pink { background: #ff2a5f; color: white; }
-    .btn-blue { background: #00ffcc; color: #121226; }
-    .btn-purple { background: #9d4edd; color: white; }
-
-    .instructions {
-      margin-top: 20px;
-      font-size: 0.8rem;
-      color: #aaa;
-      background: rgba(0,0,0,0.3);
-      padding: 10px;
-      border-radius: 8px;
+    .btn:disabled {
+      background: #555;
+      box-shadow: none;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>8-BIT AVATAR 🕹️</h1>
+  <div class="container">
+    <h1>PHOTO TO 8-BIT PIXEL ART 🎨</h1>
 
-    <div class="canvas-container">
-      <canvas id="pixelCanvas" width="320" height="320"></canvas>
+    <!-- Upload Input -->
+    <div class="upload-box" onclick="document.getElementById('imageInput').click()">
+      <label class="upload-label" id="uploadLabel">
+        📁 Klik di sini untuk memilih foto dari HP/Komputer
+      </label>
+      <input type="file" id="imageInput" accept="image/*">
     </div>
 
-    <div class="btn-group">
-      <button class="btn btn-pink" onclick="setKarakter('cewek')">Cewek 👧</button>
-      <button class="btn btn-blue" onclick="setKarakter('cowok')">Cowok 👦</button>
-      <button class="btn btn-purple" onclick="gantiWarnaBaju()">Ubah Baju 👕</button>
+    <!-- Controls -->
+    <div class="controls">
+      <div class="control-group">
+        <label for="pixelSize">Ukuran Piksel (Besar Grid):</label>
+        <input type="range" id="pixelSize" min="4" max="32" value="12">
+      </div>
+      <div class="control-group">
+        <label for="colorPalette">Efek Warna Retro (Posterize):</label>
+        <input type="range" id="colorPalette" min="2" max="16" value="6">
+      </div>
     </div>
 
-    <div class="instructions">
-      💡 <b>Tips:</b> Karakter dibentuk dari matriks piksel 16x16 di JavaScript.
+    <!-- Output Canvas -->
+    <div class="canvas-wrapper">
+      <canvas id="pixelCanvas"></canvas>
     </div>
+
+    <br>
+    <button class="btn" id="downloadBtn" onclick="downloadImage()" disabled>Simpan Gambar 💾</button>
   </div>
 
   <script>
+    const imageInput = document.getElementById('imageInput');
+    const pixelSizeInput = document.getElementById('pixelSize');
+    const colorPaletteInput = document.getElementById('colorPalette');
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const uploadLabel = document.getElementById('uploadLabel');
 
-    const GRID_SIZE = 16; // Grid 16x16 piksel
-    const PIXEL_SIZE = canvas.width / GRID_SIZE; // Ukuran 1 blok piksel (20px)
+    let loadedImage = null;
 
-    // PALET WARNA (8-Bit Palette)
-    let palette = {
-      0: null,                  // Transparan
-      1: '#4a2e1a',             // Rambut Cokelat (Default)
-      2: '#ffd1b3',             // Kulit
-      3: '#1a1a2e',             // Mata/Garis Luar
-      4: '#ffffff',             // Sinar Mata / Kilau
-      5: '#ff758c',             // Blush / Pipi Merah
-      6: '#e63946',             // Mulut
-      7: '#ff2a5f',             // Baju
-      8: '#2b2d42',             // Celana / Rok
-      9: '#111111'              // Sepatu
-    };
+    // 1. Dapatkan file foto yang diunggah pengguna
+    imageInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    // MATRIKS PIKSEL 16x16 KARAKTER CEWEK
-    const avatarCewek = [
-      [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],
-      [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
-      [0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
-      [0,0,1,1,1,2,2,2,2,2,2,1,1,1,0,0],
-      [0,0,1,1,2,2,2,2,2,2,2,2,1,1,0,0],
-      [0,0,1,2,2,3,4,2,2,3,4,2,2,1,0,0],
-      [0,0,1,2,2,3,3,2,2,3,3,2,2,1,0,0],
-      [0,0,1,2,5,2,2,6,6,2,2,5,2,1,0,0],
-      [0,0,1,1,2,2,2,2,2,2,2,2,1,1,0,0],
-      [0,0,1,1,0,2,2,2,2,2,2,0,1,1,0,0],
-      [0,0,0,0,7,7,7,7,7,7,7,7,0,0,0,0],
-      [0,0,0,7,7,7,7,7,7,7,7,7,7,0,0,0],
-      [0,0,0,7,7,2,2,7,7,2,2,7,7,0,0,0],
-      [0,0,0,0,8,8,8,8,8,8,8,8,0,0,0,0],
-      [0,0,0,0,8,8,0,0,0,0,8,8,0,0,0,0],
-      [0,0,0,0,9,9,0,0,0,0,9,9,0,0,0,0]
-    ];
+      uploadLabel.innerText = `📸 File: ${file.name}`;
 
-    // MATRIKS PIKSEL 16x16 KARAKTER COWOK
-    const avatarCowok = [
-      [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],
-      [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
-      [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
-      [0,0,0,1,1,2,2,2,2,2,2,1,1,0,0,0],
-      [0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0],
-      [0,0,0,0,2,3,4,2,2,3,4,2,0,0,0,0],
-      [0,0,0,0,2,3,3,2,2,3,3,2,0,0,0,0],
-      [0,0,0,0,5,2,2,6,6,2,2,5,0,0,0,0],
-      [0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0],
-      [0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0],
-      [0,0,0,0,7,7,7,7,7,7,7,7,0,0,0,0],
-      [0,0,0,7,7,7,7,7,7,7,7,7,7,0,0,0],
-      [0,0,0,7,7,2,2,7,7,2,2,7,7,0,0,0],
-      [0,0,0,0,8,8,8,0,0,8,8,8,0,0,0,0],
-      [0,0,0,0,8,8,8,0,0,8,8,8,0,0,0,0],
-      [0,0,0,0,9,9,9,0,0,9,9,9,0,0,0,0]
-    ];
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        loadedImage = new Image();
+        loadedImage.onload = function() {
+          renderPixelArt();
+          downloadBtn.disabled = false;
+        };
+        loadedImage.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
 
-    let currentMatrix = avatarCewek;
+    // 2. Render Ulang saat Slider Digeser
+    pixelSizeInput.addEventListener('input', renderPixelArt);
+    colorPaletteInput.addEventListener('input', renderPixelArt);
 
-    // FUNGSI MENGGAMBAR PIXEL
-    function drawPixelArt() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 3. Fungsi Utama Pengubah Foto Ke Pixel Art
+    function renderPixelArt() {
+      if (!loadedImage) return;
 
-      for (let row = 0; row < GRID_SIZE; row++) {
-        for (let col = 0; col < GRID_SIZE; col++) {
-          const colorIndex = currentMatrix[row][col];
-          const color = palette[colorIndex];
+      const pixelSize = parseInt(pixelSizeInput.value);
+      const colorLevels = parseInt(colorPaletteInput.value);
 
-          if (color) {
-            ctx.fillStyle = color;
-            // Gambar kotak piksel
-            ctx.fillRect(col * PIXEL_SIZE, row * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
-          }
-        }
+      // Batasi ukuran maksimal canvas agar proses cepat
+      const maxCanvasWidth = 450;
+      let scale = 1;
+      if (loadedImage.width > maxCanvasWidth) {
+        scale = maxCanvasWidth / loadedImage.width;
       }
-    }
 
-    // PILIH KARAKTER
-    function setKarakter(tipe) {
-      if (tipe === 'cewek') {
-        currentMatrix = avatarCewek;
-      } else {
-        currentMatrix = avatarCowok;
+      const width = Math.floor(loadedImage.width * scale);
+      const height = Math.floor(loadedImage.height * scale);
+
+      canvas.width = width;
+      canvas.height = height;
+
+      // Hitung dimensi Grid Piksel yang diperkecil
+      const smallWidth = Math.max(1, Math.floor(width / pixelSize));
+      const smallHeight = Math.max(1, Math.floor(height / pixelSize));
+
+      // Canvas sementara (Off-screen Canvas) untuk melakukan proses downsizing
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCanvas.width = smallWidth;
+      tempCanvas.height = smallHeight;
+
+      // Gambarkan foto asli ke versi kecil (otomatis terkompresi pikselnya)
+      tempCtx.drawImage(loadedImage, 0, 0, smallWidth, smallHeight);
+
+      // Ambil data piksel untuk Efek Pembatasan Warna (8-Bit Color Quantization)
+      const imgData = tempCtx.getImageData(0, 0, smallWidth, smallHeight);
+      const data = imgData.data;
+
+      const step = 255 / (colorLevels - 1);
+      for (let i = 0; i < data.length; i += 4) {
+        // Red, Green, Blue
+        data[i]     = Math.round(data[i] / step) * step;     // R
+        data[i + 1] = Math.round(data[i + 1] / step) * step; // G
+        data[i + 2] = Math.round(data[i + 2] / step) * step; // B
       }
-      drawPixelArt();
+      tempCtx.putImageData(imgData, 0, 0);
+
+      // Gambar kembali ke Canvas Utama dengan mematikan Smoothing (Efek Piksel Tajam)
+      ctx.imageSmoothingEnabled = false;
+      ctx.mozImageSmoothingEnabled = false;
+      ctx.webkitImageSmoothingEnabled = false;
+      ctx.msImageSmoothingEnabled = false;
+
+      ctx.drawImage(tempCanvas, 0, 0, smallWidth, smallHeight, 0, 0, width, height);
     }
 
-    // GANTI WARNA BAJU
-    const daftarWarnaBaju = ['#ff2a5f', '#00ffcc', '#ffbe0b', '#8338ec', '#3a86ff', '#fb5607'];
-    let warnaIndex = 0;
-
-    function gantiWarnaBaju() {
-      warnaIndex = (warnaIndex + 1) % daftarWarnaBaju.length;
-      palette[7] = daftarWarnaBaju[warnaIndex];
-      drawPixelArt();
+    // 4. Download Hasil Gambar Piksel
+    function downloadImage() {
+      const link = document.createElement('a');
+      link.download = 'lukisan-pixel-8bit.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
-
-    // Tampilkan gambar saat pertama dibuka
-    drawPixelArt();
   </script>
 </body>
 </html>
