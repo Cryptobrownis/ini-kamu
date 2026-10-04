@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Animasi Sketsa Pensil Pixel to Smooth ✏️🎨</title>
+  <title>Sketsa Pensil Berwarna Pixel to Smooth ✏️🎨</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #121216;
+      background: #0f1026;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       display: flex;
@@ -34,10 +34,10 @@
     h1 {
       font-family: 'Press Start 2P', cursive;
       font-size: 0.85rem;
-      color: #e0e0e0;
+      color: #ff70a6;
       margin-bottom: 20px;
       line-height: 1.6;
-      text-shadow: 2px 2px #555;
+      text-shadow: 2px 2px #70d6ff;
     }
 
     /* SISTEM HALAMAN */
@@ -59,19 +59,19 @@
 
     /* HALAMAN 1: INPUT FOTO */
     .upload-box {
-      border: 2px dashed #aaa;
+      border: 2px dashed #ff70a6;
       border-radius: 12px;
       padding: 25px 15px;
       width: 100%;
       margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 112, 166, 0.05);
       cursor: pointer;
       transition: 0.3s;
     }
 
     .upload-box:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: #fff;
+      background: rgba(255, 112, 166, 0.15);
+      border-color: #70d6ff;
     }
 
     input[type="file"] { display: none; }
@@ -83,13 +83,13 @@
       object-fit: contain;
       margin-bottom: 15px;
       display: none;
-      border: 2px solid #888;
+      border: 2px solid #70d6ff;
     }
 
-    /* HALAMAN 2: ANIMASI SKETSA */
+    /* HALAMAN 2: ANIMASI SKETSA BERWARNA */
     .canvas-wrapper {
-      background: #fff; /* Latar putih khas kertas sketsa */
-      border: 3px solid #666;
+      background: #fff; /* Latar putih khas kertas gambar */
+      border: 3px solid #70d6ff;
       border-radius: 12px;
       overflow: hidden;
       display: flex;
@@ -97,7 +97,7 @@
       align-items: center;
       margin-bottom: 15px;
       max-width: 100%;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(112, 214, 255, 0.3);
     }
 
     canvas {
@@ -108,12 +108,12 @@
 
     .status-text {
       font-size: 0.85rem;
-      color: #ccc;
+      color: #ffd670;
       margin-bottom: 20px;
       font-weight: 600;
     }
 
-    /* TOMBOL */
+    /* TOMBOL UTAMA */
     .btn {
       font-family: 'Press Start 2P', cursive;
       font-size: 0.7rem;
@@ -121,29 +121,29 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      background: #444;
+      background: #ff70a6;
       color: white;
-      box-shadow: 0 4px 0 #222;
+      box-shadow: 0 4px 0 #c4386d;
       transition: 0.1s;
       width: 100%;
     }
 
     .btn:active {
       transform: translateY(4px);
-      box-shadow: 0 0 0 #222;
+      box-shadow: 0 0 0 #c4386d;
     }
 
     .btn:disabled {
-      background: #2a2a2a;
+      background: #333;
       box-shadow: none;
       cursor: not-allowed;
       color: #666;
     }
 
     .btn-secondary {
-      background: #777;
-      color: #fff;
-      box-shadow: 0 4px 0 #444;
+      background: #70d6ff;
+      color: #0f1026;
+      box-shadow: 0 4px 0 #2ca1cc;
       margin-top: 10px;
     }
   </style>
@@ -154,7 +154,7 @@
 
     <!-- ================= HALAMAN 1: MENU INPUT ================= -->
     <div id="page1" class="page active">
-      <h1>SKETSA PENSIL ✏️</h1>
+      <h1>PENSIL BERWARNA ✏️🎨</h1>
 
       <div class="upload-box" onclick="document.getElementById('photoInput').click()">
         <p id="uploadLabel">📁 Klik di sini untuk memilih foto dari perangkat</p>
@@ -168,13 +168,13 @@
 
     <!-- ================= HALAMAN 2: ANIMASI PROSES ================= -->
     <div id="page2" class="page">
-      <h1>PROSES SKETSA ✏️</h1>
+      <h1>SKETSA BERWARNA ✏️🎨</h1>
 
       <div class="canvas-wrapper">
         <canvas id="animCanvas"></canvas>
       </div>
 
-      <div id="statusText" class="status-text">Memproses sketsa piksel...</div>
+      <div id="statusText" class="status-text">Mempersiapkan sketsa berwarna...</div>
 
       <button id="replayBtn" class="btn btn-secondary" onclick="startSketchAnimation()">Putar Ulang Animasi 🔄</button>
       <button class="btn" onclick="goToPage(1)">Upload Foto Lain 📁</button>
@@ -194,10 +194,10 @@
     const replayBtn = document.getElementById('replayBtn');
 
     let loadedImage = null;
-    let sketchCanvas = null; // Canvas penampung hasil sketsa asli
+    let sketchCanvas = null; // Canvas penampung hasil sketsa pensil berwarna
     let animationFrameId = null;
 
-    // 1. Input Foto
+    // 1. Input Foto Pengguna
     photoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -217,10 +217,10 @@
       reader.readAsDataURL(file);
     });
 
-    // 2. Tombol Lanjut
+    // 2. Klik Tombol Lanjut
     processBtn.addEventListener('click', function() {
       goToPage(2);
-      generatePencilSketch();
+      generateColoredPencilSketch();
       startSketchAnimation();
     });
 
@@ -233,8 +233,8 @@
       }
     }
 
-    // 3. FUNGSI MEMBUAT EFEK SKETSA PENSIL (Edge Detection / Sobel Filter)
-    function generatePencilSketch() {
+    // 3. FUNGSI MEMBUAT EFEK SKETSA PENSIL BERWARNA
+    function generateColoredPencilSketch() {
       const maxW = 450;
       let scale = 1;
       if (loadedImage.width > maxW) scale = maxW / loadedImage.width;
@@ -251,7 +251,7 @@
       const imgData = sCtx.getImageData(0, 0, w, h);
       const data = imgData.data;
 
-      // Konversi ke Grayscale
+      // Buat array grayscale untuk deteksi garis tepi (Sobel)
       const gray = new Float32Array(w * h);
       for (let i = 0; i < data.length; i += 4) {
         gray[i / 4] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
@@ -260,11 +260,12 @@
       const sketchData = sCtx.createImageData(w, h);
       const sData = sketchData.data;
 
-      // Operator Sobel untuk Garis Sketsa Pensil
+      // Operator Sobel + Blending Warna Asli (Pencil Coloring)
       for (let y = 1; y < h - 1; y++) {
         for (let x = 1; x < w - 1; x++) {
           const idx = y * w + x;
 
+          // Deteksi tepi dengan Sobel Operator
           const gx =
             -1 * gray[idx - w - 1] + 1 * gray[idx - w + 1] +
             -2 * gray[idx - 1]     + 2 * gray[idx + 1] +
@@ -276,15 +277,21 @@
 
           const magnitude = Math.sqrt(gx * gx + gy * gy);
           
-          // Invert: area latar jadi putih, garis tepi jadi hitam pensil
-          let val = 255 - (magnitude * 1.5);
-          if (val < 0) val = 0;
-          if (val > 255) val = 255;
+          // Faktor arsiran pensil (1.0 = kertas terang, 0.0 = garis tebal)
+          let edgeFactor = (255 - (magnitude * 1.6)) / 255;
+          if (edgeFactor < 0) edgeFactor = 0;
+          if (edgeFactor > 1) edgeFactor = 1;
 
           const pIdx = idx * 4;
-          sData[pIdx]     = val; // Red
-          sData[pIdx + 1] = val; // Green
-          sData[pIdx + 2] = val; // Blue
+          const r = data[pIdx];
+          const g = data[pIdx + 1];
+          const b = data[pIdx + 2];
+
+          // Penggabungan warna foto asli dengan kontur pensil (Efek Sketsa Pensil Berwarna)
+          const paperBrightness = 25; // Sentuhan efek pencerah kertas
+          sData[pIdx]     = Math.min(255, (r + paperBrightness) * edgeFactor); // Red
+          sData[pIdx + 1] = Math.min(255, (g + paperBrightness) * edgeFactor); // Green
+          sData[pIdx + 2] = Math.min(255, (b + paperBrightness) * edgeFactor); // Blue
           sData[pIdx + 3] = 255; // Alpha
         }
       }
@@ -308,9 +315,8 @@
       let currentScale = 0.02; // Mulai dari piksel sangat besar/buram (2%)
       const targetScale = 1.0; 
       
-      // KECEPATAN ANIMASI (Dibuat lambat)
-      // Nilai semakin kecil = proses animasi semakin lambat
-      const speed = 0.0015; 
+      // KECEPATAN TRANSISI ANIMASI (Dibuat sangat lambat & mulus)
+      const speed = 0.0012; 
 
       replayBtn.disabled = true;
 
@@ -325,10 +331,10 @@
           tempCanvas.width = sw;
           tempCanvas.height = sh;
 
-          // Kecilkan sketsa ke piksel mini
+          // Render versi piksel mini
           tempCtx.drawImage(sketchCanvas, 0, 0, sw, sh);
 
-          // Jika skala sudah mendekati 85%, aktifkan smoothing agar halus
+          // Aktifkan smoothing saat mendekati akhir (85%) agar menjadi jernih & smooth
           const isSmoothing = currentScale > 0.85;
           ctx.imageSmoothingEnabled = isSmoothing;
           ctx.mozImageSmoothingEnabled = isSmoothing;
@@ -338,14 +344,14 @@
           ctx.drawImage(tempCanvas, 0, 0, sw, sh, 0, 0, w, h);
 
           const percent = Math.floor((currentScale / targetScale) * 100);
-          statusText.innerText = `✏️ Menggambar Sketsa: ${percent}%...`;
+          statusText.innerText = `✏️ Menggambar Sketsa Berwarna: ${percent}%...`;
 
           animationFrameId = requestAnimationFrame(renderFrame);
         } else {
-          // Hasil Akhir: Sketsa Pensil Halus / Smooth Sempurna
+          // Hasil Akhir: Sketsa Pensil Berwarna Mulus & Smooth Sempurna
           ctx.imageSmoothingEnabled = true;
           ctx.drawImage(sketchCanvas, 0, 0, w, h);
-          statusText.innerText = "✨ Selesai! Sketsa pensil terbentuk sempurna.";
+          statusText.innerText = "✨ Selesai! Sketsa pensil berwarna terbentuk sempurna.";
           replayBtn.disabled = false;
         }
       }
