@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sketsa Pensil Berwarna Pixel to Smooth ✏️🎨</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Sketsa Pensil Berwarna & Ramalan Gombal ✏️🔮</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -86,9 +86,9 @@
       border: 2px solid #70d6ff;
     }
 
-    /* HALAMAN 2: ANIMASI SKETSA BERWARNA */
+    /* HALAMAN 2: ANIMASI SKETSA & RAMALAN */
     .canvas-wrapper {
-      background: #fff; /* Latar putih khas kertas gambar */
+      background: #fff;
       border: 3px solid #70d6ff;
       border-radius: 12px;
       overflow: hidden;
@@ -109,8 +109,39 @@
     .status-text {
       font-size: 0.85rem;
       color: #ffd670;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-weight: 600;
+    }
+
+    /* KARTU RAMALAN GOMBAL */
+    .ramalan-card {
+      background: rgba(255, 112, 166, 0.15);
+      border: 2px dashed #ff70a6;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      width: 100%;
+      display: none;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .ramalan-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65rem;
+      color: #ffd670;
+      margin-bottom: 8px;
+    }
+
+    .ramalan-text {
+      font-size: 0.88rem;
+      color: #fff;
+      font-style: italic;
+      line-height: 1.5;
     }
 
     /* TOMBOL UTAMA */
@@ -166,7 +197,7 @@
       <button id="processBtn" class="btn" disabled>LANJUT PROSES ➔</button>
     </div>
 
-    <!-- ================= HALAMAN 2: ANIMASI PROSES ================= -->
+    <!-- ================= HALAMAN 2: ANIMASI PROSES & RAMALAN ================= -->
     <div id="page2" class="page">
       <h1>SKETSA BERWARNA ✏️🎨</h1>
 
@@ -176,7 +207,13 @@
 
       <div id="statusText" class="status-text">Mempersiapkan sketsa berwarna...</div>
 
-      <button id="replayBtn" class="btn btn-secondary" onclick="startSketchAnimation()">Putar Ulang Animasi 🔄</button>
+      <!-- TEMPAT RAMALAN GOMBAL TAMPIL -->
+      <div id="ramalanCard" class="ramalan-card">
+        <div class="ramalan-title">🔮 RAMALAN SKETSA HARI INI 🔮</div>
+        <div id="ramalanText" class="ramalan-text">...</div>
+      </div>
+
+      <button id="replayBtn" class="btn btn-secondary" onclick="startSketchAnimation()">Putar Ulang & Acak Ramalan 🔄</button>
       <button class="btn" onclick="goToPage(1)">Upload Foto Lain 📁</button>
     </div>
 
@@ -191,13 +228,29 @@
     const canvas = document.getElementById('animCanvas');
     const ctx = canvas.getContext('2d');
     const statusText = document.getElementById('statusText');
+    const ramalanCard = document.getElementById('ramalanCard');
+    const ramalanText = document.getElementById('ramalanText');
     const replayBtn = document.getElementById('replayBtn');
 
     let loadedImage = null;
-    let sketchCanvas = null; // Canvas penampung hasil sketsa pensil berwarna
+    let sketchCanvas = null;
     let animationFrameId = null;
 
-    // 1. Input Foto Pengguna
+    // KOLEKSI RAMALAN GOMBAL LUCU
+    const ramalanList = [
+      "Berdasarkan garis sketsa ini, kamu diramalkan bakal sering kepikiran aku setiap mau tidur. Hati-hati ya! 😜",
+      "Garis pensilnya tajam, tapi belum bisa menandingi ketajaman tatapan matamu yang bikin hatiku luluh. eaaa~ 💘",
+      "Hasil analisis piksel: Tingkat kemanisanmu di foto ini melebihi batas normal. Tolong dikondisikan senyumnya! 🍩",
+      "Ramalan bahaya: Ada indikasi kuat foto ini akan membuat seseorang gagal fokus seharian! ⚠️😍",
+      "Masa depanmu terlihat sangat cerah, tapi akan jauh lebih cerah kalau kita laluinya bersama. 🔮✨",
+      "Menurut guratan pensil ini, kamu kurang vitamin 'ME'. Disarankan segera bertemu untuk menjaga kesehatan hati. 💊💖",
+      "Sketsa ini membuktikan bahwa kamu nggak cocok jadi bintang film, tapi sangat cocok jadi bintang di hatiku. ⭐😊",
+      "Ramalan kesehatan: Detak jantung seseorang diramalkan bakal berdebar lebih cepat tiap kali melihat foto ini! 💓",
+      "Garis pensilnya rapi banget, persis kayak rencana masa depan kita yang sudah tertata manis. 🙈❤️",
+      "Ramalan cuaca hari ini: Di luar boleh berawan, tapi di hatimu diramalkan penuh bunga-bunga bermekaran! 🌸"
+    ];
+
+    // 1. Input Foto
     photoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -217,7 +270,7 @@
       reader.readAsDataURL(file);
     });
 
-    // 2. Klik Tombol Lanjut
+    // 2. Tombol Lanjut
     processBtn.addEventListener('click', function() {
       goToPage(2);
       generateColoredPencilSketch();
@@ -233,7 +286,7 @@
       }
     }
 
-    // 3. FUNGSI MEMBUAT EFEK SKETSA PENSIL BERWARNA
+    // 3. Efek Sketsa Pensil Berwarna
     function generateColoredPencilSketch() {
       const maxW = 450;
       let scale = 1;
@@ -251,7 +304,6 @@
       const imgData = sCtx.getImageData(0, 0, w, h);
       const data = imgData.data;
 
-      // Buat array grayscale untuk deteksi garis tepi (Sobel)
       const gray = new Float32Array(w * h);
       for (let i = 0; i < data.length; i += 4) {
         gray[i / 4] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
@@ -260,12 +312,10 @@
       const sketchData = sCtx.createImageData(w, h);
       const sData = sketchData.data;
 
-      // Operator Sobel + Blending Warna Asli (Pencil Coloring)
       for (let y = 1; y < h - 1; y++) {
         for (let x = 1; x < w - 1; x++) {
           const idx = y * w + x;
 
-          // Deteksi tepi dengan Sobel Operator
           const gx =
             -1 * gray[idx - w - 1] + 1 * gray[idx - w + 1] +
             -2 * gray[idx - 1]     + 2 * gray[idx + 1] +
@@ -276,8 +326,6 @@
              1 * gray[idx + w - 1] + 2 * gray[idx + w] + 1 * gray[idx + w + 1];
 
           const magnitude = Math.sqrt(gx * gx + gy * gy);
-          
-          // Faktor arsiran pensil (1.0 = kertas terang, 0.0 = garis tebal)
           let edgeFactor = (255 - (magnitude * 1.6)) / 255;
           if (edgeFactor < 0) edgeFactor = 0;
           if (edgeFactor > 1) edgeFactor = 1;
@@ -287,12 +335,11 @@
           const g = data[pIdx + 1];
           const b = data[pIdx + 2];
 
-          // Penggabungan warna foto asli dengan kontur pensil (Efek Sketsa Pensil Berwarna)
-          const paperBrightness = 25; // Sentuhan efek pencerah kertas
-          sData[pIdx]     = Math.min(255, (r + paperBrightness) * edgeFactor); // Red
-          sData[pIdx + 1] = Math.min(255, (g + paperBrightness) * edgeFactor); // Green
-          sData[pIdx + 2] = Math.min(255, (b + paperBrightness) * edgeFactor); // Blue
-          sData[pIdx + 3] = 255; // Alpha
+          const paperBrightness = 25;
+          sData[pIdx]     = Math.min(255, (r + paperBrightness) * edgeFactor);
+          sData[pIdx + 1] = Math.min(255, (g + paperBrightness) * edgeFactor);
+          sData[pIdx + 2] = Math.min(255, (b + paperBrightness) * edgeFactor);
+          sData[pIdx + 3] = 255;
         }
       }
 
@@ -302,7 +349,7 @@
       canvas.height = h;
     }
 
-    // 4. ANIMASI SLOW-MOTION (PIXEL BURAM -> SKETSA SMOOTH)
+    // 4. Animasi Slow-Motion & Penampil Ramalan
     function startSketchAnimation() {
       if (!sketchCanvas) return;
 
@@ -312,13 +359,12 @@
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
 
-      let currentScale = 0.02; // Mulai dari piksel sangat besar/buram (2%)
+      let currentScale = 0.02;
       const targetScale = 1.0; 
-      
-      // KECEPATAN TRANSISI ANIMASI (Dibuat sangat lambat & mulus)
-      const speed = 0.0012; 
+      const speed = 0.0012; // Animasi berjalan lambat
 
       replayBtn.disabled = true;
+      ramalanCard.style.display = 'none'; // Sembunyikan ramalan saat animasi berjalan
 
       function renderFrame() {
         if (currentScale < targetScale) {
@@ -331,10 +377,8 @@
           tempCanvas.width = sw;
           tempCanvas.height = sh;
 
-          // Render versi piksel mini
           tempCtx.drawImage(sketchCanvas, 0, 0, sw, sh);
 
-          // Aktifkan smoothing saat mendekati akhir (85%) agar menjadi jernih & smooth
           const isSmoothing = currentScale > 0.85;
           ctx.imageSmoothingEnabled = isSmoothing;
           ctx.mozImageSmoothingEnabled = isSmoothing;
@@ -344,20 +388,30 @@
           ctx.drawImage(tempCanvas, 0, 0, sw, sh, 0, 0, w, h);
 
           const percent = Math.floor((currentScale / targetScale) * 100);
-          statusText.innerText = `✏️ Menggambar Sketsa Berwarna: ${percent}%...`;
+          statusText.innerText = `✏️ Memproses Sketsa & Membaca Ramalan: ${percent}%...`;
 
           animationFrameId = requestAnimationFrame(renderFrame);
         } else {
-          // Hasil Akhir: Sketsa Pensil Berwarna Mulus & Smooth Sempurna
+          // Hasil Akhir
           ctx.imageSmoothingEnabled = true;
           ctx.drawImage(sketchCanvas, 0, 0, w, h);
-          statusText.innerText = "✨ Selesai! Sketsa pensil berwarna terbentuk sempurna.";
+          statusText.innerText = "✨ Selesai! Sketsa & Ramalan Siap!";
+          
+          // Pilih dan tampilkan ramalan gombal acak
+          showRandomRamalan();
           replayBtn.disabled = false;
         }
       }
 
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       renderFrame();
+    }
+
+    // Fungsi Mengambil Ramalan Acak
+    function showRandomRamalan() {
+      const randomIndex = Math.floor(Math.random() * ramalanList.length);
+      ramalanText.innerText = `"${ramalanList[randomIndex]}"`;
+      ramalanCard.style.display = 'block';
     }
   </script>
 </body>
