@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karakter Piksel 8-Bit 👾</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #121226;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .card {
+      background: #1a1a3a;
+      border: 4px solid #ff2a5f;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 0 25px rgba(255, 42, 95, 0.4);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.1rem;
+      color: #00ffcc;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px #ff2a5f;
+      line-height: 1.5;
+    }
+
+    /* Container Canvas Pixel Art */
+    .canvas-container {
+      background: #0b0b1a;
+      border: 3px solid #00ffcc;
+      border-radius: 12px;
+      padding: 15px;
+      display: inline-block;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+    }
+
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65rem;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.2s ease;
+      box-shadow: 0 4px 0 #000;
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #000;
+    }
+
+    .btn-pink { background: #ff2a5f; color: white; }
+    .btn-blue { background: #00ffcc; color: #121226; }
+    .btn-purple { background: #9d4edd; color: white; }
+
+    .instructions {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #aaa;
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>8-BIT AVATAR 🕹️</h1>
+
+    <div class="canvas-container">
+      <canvas id="pixelCanvas" width="320" height="320"></canvas>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-pink" onclick="setKarakter('cewek')">Cewek 👧</button>
+      <button class="btn btn-blue" onclick="setKarakter('cowok')">Cowok 👦</button>
+      <button class="btn btn-purple" onclick="gantiWarnaBaju()">Ubah Baju 👕</button>
+    </div>
+
+    <div class="instructions">
+      💡 <b>Tips:</b> Karakter dibentuk dari matriks piksel 16x16 di JavaScript.
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('pixelCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const GRID_SIZE = 16; // Grid 16x16 piksel
+    const PIXEL_SIZE = canvas.width / GRID_SIZE; // Ukuran 1 blok piksel (20px)
+
+    // PALET WARNA (8-Bit Palette)
+    let palette = {
+      0: null,                  // Transparan
+      1: '#4a2e1a',             // Rambut Cokelat (Default)
+      2: '#ffd1b3',             // Kulit
+      3: '#1a1a2e',             // Mata/Garis Luar
+      4: '#ffffff',             // Sinar Mata / Kilau
+      5: '#ff758c',             // Blush / Pipi Merah
+      6: '#e63946',             // Mulut
+      7: '#ff2a5f',             // Baju
+      8: '#2b2d42',             // Celana / Rok
+      9: '#111111'              // Sepatu
+    };
+
+    // MATRIKS PIKSEL 16x16 KARAKTER CEWEK
+    const avatarCewek = [
+      [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],
+      [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
+      [0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+      [0,0,1,1,1,2,2,2,2,2,2,1,1,1,0,0],
+      [0,0,1,1,2,2,2,2,2,2,2,2,1,1,0,0],
+      [0,0,1,2,2,3,4,2,2,3,4,2,2,1,0,0],
+      [0,0,1,2,2,3,3,2,2,3,3,2,2,1,0,0],
+      [0,0,1,2,5,2,2,6,6,2,2,5,2,1,0,0],
+      [0,0,1,1,2,2,2,2,2,2,2,2,1,1,0,0],
+      [0,0,1,1,0,2,2,2,2,2,2,0,1,1,0,0],
+      [0,0,0,0,7,7,7,7,7,7,7,7,0,0,0,0],
+      [0,0,0,7,7,7,7,7,7,7,7,7,7,0,0,0],
+      [0,0,0,7,7,2,2,7,7,2,2,7,7,0,0,0],
+      [0,0,0,0,8,8,8,8,8,8,8,8,0,0,0,0],
+      [0,0,0,0,8,8,0,0,0,0,8,8,0,0,0,0],
+      [0,0,0,0,9,9,0,0,0,0,9,9,0,0,0,0]
+    ];
+
+    // MATRIKS PIKSEL 16x16 KARAKTER COWOK
+    const avatarCowok = [
+      [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],
+      [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
+      [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
+      [0,0,0,1,1,2,2,2,2,2,2,1,1,0,0,0],
+      [0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0],
+      [0,0,0,0,2,3,4,2,2,3,4,2,0,0,0,0],
+      [0,0,0,0,2,3,3,2,2,3,3,2,0,0,0,0],
+      [0,0,0,0,5,2,2,6,6,2,2,5,0,0,0,0],
+      [0,0,0,0,2,2,2,2,2,2,2,2,0,0,0,0],
+      [0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0],
+      [0,0,0,0,7,7,7,7,7,7,7,7,0,0,0,0],
+      [0,0,0,7,7,7,7,7,7,7,7,7,7,0,0,0],
+      [0,0,0,7,7,2,2,7,7,2,2,7,7,0,0,0],
+      [0,0,0,0,8,8,8,0,0,8,8,8,0,0,0,0],
+      [0,0,0,0,8,8,8,0,0,8,8,8,0,0,0,0],
+      [0,0,0,0,9,9,9,0,0,9,9,9,0,0,0,0]
+    ];
+
+    let currentMatrix = avatarCewek;
+
+    // FUNGSI MENGGAMBAR PIXEL
+    function drawPixelArt() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
+          const colorIndex = currentMatrix[row][col];
+          const color = palette[colorIndex];
+
+          if (color) {
+            ctx.fillStyle = color;
+            // Gambar kotak piksel
+            ctx.fillRect(col * PIXEL_SIZE, row * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+          }
+        }
+      }
+    }
+
+    // PILIH KARAKTER
+    function setKarakter(tipe) {
+      if (tipe === 'cewek') {
+        currentMatrix = avatarCewek;
+      } else {
+        currentMatrix = avatarCowok;
+      }
+      drawPixelArt();
+    }
+
+    // GANTI WARNA BAJU
+    const daftarWarnaBaju = ['#ff2a5f', '#00ffcc', '#ffbe0b', '#8338ec', '#3a86ff', '#fb5607'];
+    let warnaIndex = 0;
+
+    function gantiWarnaBaju() {
+      warnaIndex = (warnaIndex + 1) % daftarWarnaBaju.length;
+      palette[7] = daftarWarnaBaju[warnaIndex];
+      drawPixelArt();
+    }
+
+    // Tampilkan gambar saat pertama dibuka
+    drawPixelArt();
+  </script>
+</body>
+</html>
