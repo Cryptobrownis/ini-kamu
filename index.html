@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Konverter Foto ke Pixel Art 8-Bit 📸👾</title>
+  <title>Lukisan Pixel Art 8-Bit 🎨👾</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,18 +32,18 @@
 
     h1 {
       font-family: 'Press Start 2P', cursive;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #00ffcc;
       margin-bottom: 20px;
       line-height: 1.6;
       text-shadow: 2px 2px #ff2a5f;
     }
 
-    /* Area Upload Foto */
+    /* Area Upload / Status Foto */
     .upload-box {
       border: 2px dashed #ff2a5f;
       border-radius: 12px;
-      padding: 20px;
+      padding: 15px;
       margin-bottom: 20px;
       background: rgba(255, 42, 95, 0.05);
       cursor: pointer;
@@ -60,7 +60,7 @@
 
     .upload-label {
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #ffd1b3;
       display: block;
     }
@@ -84,17 +84,13 @@
       font-size: 0.85rem;
     }
 
-    .control-group label {
-      font-weight: 600;
-    }
-
     input[type="range"] {
       width: 50%;
       accent-color: #00ffcc;
       cursor: pointer;
     }
 
-    /* Container Canvas */
+    /* Container Canvas Output */
     .canvas-wrapper {
       background: #000;
       border: 2px solid #00ffcc;
@@ -142,24 +138,24 @@
 <body>
 
   <div class="container">
-    <h1>PHOTO TO 8-BIT PIXEL ART 🎨</h1>
+    <h1>FOTO TO PIXEL ART 8-BIT 🎨</h1>
 
-    <!-- Upload Input -->
+    <!-- Upload Input / Ganti Foto -->
     <div class="upload-box" onclick="document.getElementById('imageInput').click()">
       <label class="upload-label" id="uploadLabel">
-        📁 Klik di sini untuk memilih foto dari HP/Komputer
+        🔄 Memuat foto bawaan...
       </label>
       <input type="file" id="imageInput" accept="image/*">
     </div>
 
-    <!-- Controls -->
+    <!-- Controls Slider -->
     <div class="controls">
       <div class="control-group">
-        <label for="pixelSize">Ukuran Piksel (Besar Grid):</label>
+        <label for="pixelSize">Ukuran Piksel (Detail):</label>
         <input type="range" id="pixelSize" min="4" max="32" value="12">
       </div>
       <div class="control-group">
-        <label for="colorPalette">Efek Warna Retro (Posterize):</label>
+        <label for="colorPalette">Warna Retro (Posterize):</label>
         <input type="range" id="colorPalette" min="2" max="16" value="6">
       </div>
     </div>
@@ -184,7 +180,30 @@
 
     let loadedImage = null;
 
-    // 1. Dapatkan file foto yang diunggah pengguna
+    // 1. FOTO OTOMATIS DIMUAT SAAT HALAMAN DIBUKA
+    window.addEventListener('DOMContentLoaded', () => {
+      // ⬇️ GANTI 'foto-ku.jpg' DENGAN NAMA FILE FOTO KAMU ATAU LINK URL GAMBAR ⬇️
+      muatFotoBawaan('foto-ann.jpeg'); 
+    });
+
+    function muatFotoBawaan(src) {
+      loadedImage = new Image();
+      loadedImage.crossOrigin = "Anonymous"; 
+      
+      loadedImage.onload = function() {
+        renderPixelArt();
+        downloadBtn.disabled = false;
+        uploadLabel.innerText = "📸 Foto otomatis dimuat (Klik untuk ganti foto)";
+      };
+
+      loadedImage.onerror = function() {
+        uploadLabel.innerText = "⚠️️ Foto 'foto-ku.jpg' tidak ditemukan! Klik untuk upload manual.";
+      };
+
+      loadedImage.src = src;
+    }
+
+    // 2. Pengguna Bisa Tetap Mengganti Foto Lewat Input Upload
     imageInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -203,18 +222,17 @@
       reader.readAsDataURL(file);
     });
 
-    // 2. Render Ulang saat Slider Digeser
+    // 3. Render Ulang saat Slider Digeser
     pixelSizeInput.addEventListener('input', renderPixelArt);
     colorPaletteInput.addEventListener('input', renderPixelArt);
 
-    // 3. Fungsi Utama Pengubah Foto Ke Pixel Art
+    // 4. Proses Konversi Foto Asli Ke Lukisan Pixel Art
     function renderPixelArt() {
       if (!loadedImage) return;
 
       const pixelSize = parseInt(pixelSizeInput.value);
       const colorLevels = parseInt(colorPaletteInput.value);
 
-      // Batasi ukuran maksimal canvas agar proses cepat
       const maxCanvasWidth = 450;
       let scale = 1;
       if (loadedImage.width > maxCanvasWidth) {
@@ -227,33 +245,27 @@
       canvas.width = width;
       canvas.height = height;
 
-      // Hitung dimensi Grid Piksel yang diperkecil
       const smallWidth = Math.max(1, Math.floor(width / pixelSize));
       const smallHeight = Math.max(1, Math.floor(height / pixelSize));
 
-      // Canvas sementara (Off-screen Canvas) untuk melakukan proses downsizing
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       tempCanvas.width = smallWidth;
       tempCanvas.height = smallHeight;
 
-      // Gambarkan foto asli ke versi kecil (otomatis terkompresi pikselnya)
       tempCtx.drawImage(loadedImage, 0, 0, smallWidth, smallHeight);
 
-      // Ambil data piksel untuk Efek Pembatasan Warna (8-Bit Color Quantization)
       const imgData = tempCtx.getImageData(0, 0, smallWidth, smallHeight);
       const data = imgData.data;
 
       const step = 255 / (colorLevels - 1);
       for (let i = 0; i < data.length; i += 4) {
-        // Red, Green, Blue
-        data[i]     = Math.round(data[i] / step) * step;     // R
-        data[i + 1] = Math.round(data[i + 1] / step) * step; // G
-        data[i + 2] = Math.round(data[i + 2] / step) * step; // B
+        data[i]     = Math.round(data[i] / step) * step;     // Red
+        data[i + 1] = Math.round(data[i + 1] / step) * step; // Green
+        data[i + 2] = Math.round(data[i + 2] / step) * step; // Blue
       }
       tempCtx.putImageData(imgData, 0, 0);
 
-      // Gambar kembali ke Canvas Utama dengan mematikan Smoothing (Efek Piksel Tajam)
       ctx.imageSmoothingEnabled = false;
       ctx.mozImageSmoothingEnabled = false;
       ctx.webkitImageSmoothingEnabled = false;
@@ -262,7 +274,7 @@
       ctx.drawImage(tempCanvas, 0, 0, smallWidth, smallHeight, 0, 0, width, height);
     }
 
-    // 4. Download Hasil Gambar Piksel
+    // 5. Simpan Hasil Piksel Ke HP/Laptop
     function downloadImage() {
       const link = document.createElement('a');
       link.download = 'lukisan-pixel-8bit.png';
